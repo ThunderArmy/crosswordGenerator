@@ -25,7 +25,7 @@ class Generator {
     var reversed = _random.nextBool();
     var horizontal = _random.nextBool();
 
-    _wordfield.add(List.generate(xpos, (index) => '0'));
+    _wordfield.add(List.generate(xpos + 1, (index) => '0'));
     /*word.split('').forEach((element) {
       _wordfield[0].add(element);
     });*/
@@ -39,8 +39,16 @@ class Generator {
       if (horizontal) {
         //region horizontal
         if (_wordfield.length < ypos) {
+          //neue hinzufügen
           for (var i = _wordfield.length; i <= ypos; i++) {
             _wordfield.add(List.generate(xpos + word.length, (index) => '0'));
+          }
+          //alte auf größe anpassen
+          for (var i = 0; i < ypos; i++) {
+            var list = _wordfield[i];
+            while (list.length < xpos + word.length) {
+              list.add('0');
+            }
           }
         }
         if (_wordfield[ypos].length >= word.length + xpos) {
@@ -70,7 +78,7 @@ class Generator {
           for (var i = 0; i < _wordfield.length; i++) {
             var list = _wordfield[i];
             for (var j = list.length; j < xpos + word.length; j++) {
-              list[j] = '0';
+              list.add('0');
             }
           }
           //wort einfügen
@@ -85,6 +93,15 @@ class Generator {
         //region vertikal
         if (_wordfield.length >= word.length + ypos) {
           //hoehepasst
+          //checken ob breite passt
+          if (_wordfield.length < xpos) {
+            for (var i = 0; i < ypos; i++) {
+              var list = _wordfield[i];
+              while (list.length < xpos + 1) {
+                list.add('0');
+              }
+            }
+          }
           var empty = true;
           for (var i in _wordfield) {
             //check if there is place to insert new word
@@ -104,12 +121,24 @@ class Generator {
           }
         } else {
           //höhe passt nicht
+          //neue hinzufügen
           while (_wordfield.length < ypos + word.length) {
             if (_wordfield.isEmpty) {
-              _wordfield.add(List.generate(word.length, (index) => '0'));
+              _wordfield.add(List.generate(xpos + 1, (index) => '0'));
             } else {
-              _wordfield
-                  .add(List.generate(_wordfield[0].length, (index) => '0'));
+              if (_wordfield[0].length < xpos + 1) {
+                _wordfield.add(List.generate(xpos + 1, (index) => '0'));
+              } else {
+                _wordfield
+                    .add(List.generate(_wordfield[0].length, (index) => '0'));
+              }
+            }
+          }
+          //alte bearbeiten
+          for (var i = 0; i < ypos; i++) {
+            var list = _wordfield[i];
+            while (list.length < xpos + 1) {
+              list.add('0');
             }
           }
           //höhe angepasst; wort einfügen
