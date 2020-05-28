@@ -164,7 +164,7 @@ class Generator {
       for (var c in list) {
         stdout.write(c.toString() + ' ');
       }
-      print('');
+      stdout.writeln();
     }
   }
 
