@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 extension Field2d on List<List<String>> {
@@ -20,71 +21,73 @@ extension Field2d on List<List<String>> {
 
     if (xpos + word.length <= elementAt(0).length) {
       //länge passt
-      var empty = true;
       for (var i = xpos; i < xpos + word.length; i++) {
         if (elementAt(ypos)[i] != '0') {
-          empty = false;
-        }
-      }
-      if (empty) {
-        for (var i = 0; i < word.length; i++) {
-          elementAt(ypos)[xpos + i] = word[i];
-        }
-      }
-      return empty;
-    } else {
-      //länge passt nicht
-      //wenn sowieso besetzt -> return false (no success)
-      var empty = true;
-      if (xpos < elementAt(0).length) {
-        for (var i = xpos; i < xpos + word.length; i++) {
-          if (elementAt(ypos)[i] != '0') {
-            empty = false;
-          }
-        }
-      }
-      if (!empty) {
-        return false;
-      }
-      //nicht besetzt -> länge anpassen
-      for (var list in this) {
-        while (list.length < xpos + word.length) {
-          list.add('0');
+          return false;
         }
       }
       for (var i = 0; i < word.length; i++) {
         elementAt(ypos)[xpos + i] = word[i];
       }
-      return true;
+      return true; //Erfolgreich eingefügt
+    } else {
+      //länge passt nicht
+      //wenn sowieso besetzt -> return false (no success)
+
+      try {
+        for (var i = xpos; i < elementAt(0).length; i++) {
+          if (elementAt(ypos)[i] != '0') {
+            return false; //Wort besetzt Platz. Neues Wort kann nicht eingefügt werden.
+          }
+        }
+      } catch (e) {
+        print('X: ' + xpos.toString());
+        print('Y: ' + ypos.toString());
+        print('Word: ' + word);
+        throw e;
+      }
+      //nicht besetzt -> länge anpassen
+      for (var list in this) {
+        while (list.length < xpos + word.length) {
+          //Bug Anfällig evt. <= statt <
+          list.add('0');
+        }
+      }
+      //Wort einfügen
+      for (var i = 0; i < word.length; i++) {
+        elementAt(ypos)[xpos + i] = word[i];
+      }
+      return true; //Wort wurde eingefügt
     }
   }
 
   bool insertVertical(int ypos, int xpos, String word) {
     if (length < ypos + word.length) {
       //höhe nicht ausreichend -> neue listen einfügen
+      var adjustTo;
+      if (length > 0) {
+        adjustTo =
+            elementAt(0).length > xpos + 1 ? elementAt(0).length : xpos + 1;
+      } else {
+        adjustTo = xpos + 1;
+      }
       while (length < ypos + word.length) {
-        add(List<String>.filled(xpos + 1, '0', growable: true));
+        add(List<String>.filled(adjustTo, '0', growable: true));
       }
     }
 
-    if (xpos <= elementAt(0).length) {
+    if (xpos < elementAt(0).length) {
       //länge passt
       //check if besetzt
-      var empty = true;
       for (var i = 0; i < word.length; i++) {
         var list = elementAt(i + ypos);
         if (list[xpos] != '0') {
-          empty = false;
+          return false; //bestzt => return false
         }
-      }
-      //wenn besetzt -> return false (no success)
-      if (!empty) {
-        return false;
       }
       //einfügen
       for (var i = 0; i < word.length; i++) {
         elementAt(i + ypos)[xpos] = word[i];
-        ;
       }
       return true;
     } else {

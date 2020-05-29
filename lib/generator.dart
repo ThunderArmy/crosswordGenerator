@@ -17,6 +17,9 @@ class Generator {
   }
 
   List<List<String>> generate() {
+    if(_wordlist.isEmpty) {
+      return null;
+    }
     var word = _getRandomWordFromList();
 
     var xpos = _random.nextInt(4);
@@ -30,7 +33,7 @@ class Generator {
       _wordfield[0].add(element);
     });*/
     outputWordField();
-    while (_wordlist.isNotEmpty) {
+    do {
       reversed = _random.nextBool();
       horizontal = _random.nextBool();
       if (reversed) {
@@ -161,7 +164,7 @@ class Generator {
         word = _getRandomWordFromList();
       }
       outputWordField();
-    }
+    } while (_wordlist.isNotEmpty);
 
     outputWordField();
 
@@ -175,6 +178,7 @@ class Generator {
       }
       stdout.writeln();
     }
+    stdout.writeln();
   }
 
   String _getRandomWordFromList() {

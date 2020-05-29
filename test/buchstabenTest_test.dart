@@ -53,4 +53,30 @@ void main() {
     });
     list.outputWordField();
   });
+
+  test('insert horizontal at x:0 y:2 should work', () {
+    var list = <List<String>>[];
+    list.insertHorizontal(0, 2, 'Koechin');
+    list.insertVertical(1, 6, 'gnudlibsuA');
+    expect(list, {
+      {'0', '0', 'K', 'o', 'e', 'c', 'h', 'i', 'n' },
+      {'0', '0', '0', '0', '0', '0', 'g', '0', '0' },
+      {'0', '0', '0', '0', '0', '0', 'n', '0', '0' },
+      {'0', '0', '0', '0', '0', '0', 'u', '0', '0' },
+      {'0', '0', '0', '0', '0', '0', 'd', '0', '0' },
+      {'0', '0', '0', '0', '0', '0', 'l', '0', '0' },
+      {'0', '0', '0', '0', '0', '0', 'i', '0', '0' },
+      {'0', '0', '0', '0', '0', '0', 'b', '0', '0' },
+      {'0', '0', '0', '0', '0', '0', 's', '0', '0' },
+      {'0', '0', '0', '0', '0', '0', 'u', '0', '0' },
+      {'0', '0', '0', '0', '0', '0', 'A', '0', '0' }
+    });
+    list.outputWordField();
+  });
+
+  test('insert horizontal at x: 3 y: 1 should not crash', () {
+    var list = <List<String>>[];
+    list.insertHorizontal(1, 3, 'MINT');
+
+  });
 }
