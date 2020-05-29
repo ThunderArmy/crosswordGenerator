@@ -77,6 +77,10 @@ void main() {
   test('insert horizontal at x: 3 y: 1 should not crash', () {
     var list = <List<String>>[];
     list.insertHorizontal(1, 3, 'MINT');
-
+    expect(list, {
+      {'0','0','0','0','0','0','0'},
+      {'0','0','0','M','I','N','T'}
+    });
+    list.outputWordField();
   });
 }

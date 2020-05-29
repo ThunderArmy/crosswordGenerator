@@ -17,10 +17,9 @@ class Generator {
   }
 
   List<List<String>> generate() {
-    if(_wordlist.isEmpty) {
+    if (_wordlist.isEmpty) {
       return null;
     }
-    var word = _getRandomWordFromList();
 
     var xpos = _random.nextInt(4);
     var ypos = _random.nextInt(4);
@@ -32,139 +31,39 @@ class Generator {
     /*word.split('').forEach((element) {
       _wordfield[0].add(element);
     });*/
-    outputWordField();
-    do {
+    //outputWordField();
+    var success = true;
+    var word;
+    while (_wordlist.isNotEmpty) {
+      if (success) {
+        word = _getRandomWordFromList();
+      }
       reversed = _random.nextBool();
       horizontal = _random.nextBool();
       if (reversed) {
         word = word.split('').reversed.join();
       }
-      /*
-      if (horizontal) {
-        //region horizontal
-        if (_wordfield.length < ypos) {
-          //neue hinzufügen
-          for (var i = _wordfield.length; i <= ypos; i++) {
-            _wordfield.add(List.generate(xpos + word.length, (index) => '0'));
-          }
-          //alte auf größe anpassen
-          for (var i = 0; i < ypos; i++) {
-            var list = _wordfield[i];
-            while (list.length < xpos + word.length) {
-              list.add('0');
-            }
-          }
-        }
-        if (_wordfield[ypos].length >= word.length + xpos) {
-          //region größepasst
-          var empty = true;
-          for (var i = xpos; i < xpos + word.length; i++) {
-            //check if there is place to insert new word
-            if (_wordfield[ypos][i] != '0') {
-              empty = false;
-              break;
-            }
-          }
-          if (empty) {
-            //there is place; insert word
-            for (var i = 0; i < word.length; i++) {
-              _wordfield[ypos][i + xpos] = word[i];
-            }
-          } else {
-            //felder sind besetzt
-            continue;
-          }
-        }
-        //endregion größepasst
-        else {
-          //region passtnicht
-          //länge anpassen
-          for (var i = 0; i < _wordfield.length; i++) {
-            var list = _wordfield[i];
-            for (var j = list.length; j < xpos + word.length; j++) {
-              list.add('0');
-            }
-          }
-          //wort einfügen
-          for (var i = 0; i < word.length - 1; i++) {
-            _wordfield[ypos][i + xpos] = word[i];
-          }
-
-          //endregion passtnicht
-        }
-        //endregion horizontal
-      } else {
-        //region vertikal
-        if (_wordfield.length >= word.length + ypos) {
-          //hoehepasst
-          //checken ob breite passt
-          if (_wordfield.length < xpos) {
-            for (var i = 0; i < ypos; i++) {
-              var list = _wordfield[i];
-              while (list.length < xpos + 1) {
-                list.add('0');
-              }
-            }
-          }
-          var empty = true;
-          for (var i in _wordfield) {
-            //check if there is place to insert new word
-            if (i[xpos] != '0') {
-              empty = false;
-              break;
-            }
-          }
-          if (empty) {
-            //wort einfügen
-            for (var i = 0; i < word.length; i++) {
-              _wordfield[i + ypos][xpos] = word[i];
-            }
-          } else {
-            //bereits befüllt
-            continue;
-          }
-        } else {
-          //höhe passt nicht
-          //neue hinzufügen
-          while (_wordfield.length < ypos + word.length) {
-            if (_wordfield.isEmpty) {
-              _wordfield.add(List.generate(xpos + 1, (index) => '0'));
-            } else {
-              if (_wordfield[0].length < xpos + 1) {
-                _wordfield.add(List.generate(xpos + 1, (index) => '0'));
-              } else {
-                _wordfield
-                    .add(List.generate(_wordfield[0].length, (index) => '0'));
-              }
-            }
-          }
-          //alte bearbeiten
-          for (var i = 0; i < ypos; i++) {
-            var list = _wordfield[i];
-            while (list.length < xpos + 1) {
-              list.add('0');
-            }
-          }
-          //höhe angepasst; wort einfügen
-          for (var i = 0; i < word.length; i++) {
-            _wordfield[i + ypos][xpos] = word[i];
-          }
-        }
-        //endregion vertikal
-      }*/
-      var success;
-      if (horizontal) {
+      /*stdout.write('xpos: ' +
+          xpos.toString() +
+          ', ypos: ' +
+          ypos.toString() +
+          ', horizontal: ' +
+          horizontal.toString() +
+          ', word: ' +
+          word);
+      */if (horizontal) {
         success = _wordfield.insertHorizontal(ypos, xpos, word);
       } else {
         success = _wordfield.insertVertical(ypos, xpos, word);
       }
       xpos = xpos + _random.nextInt(5);
       ypos = ypos + _random.nextInt(5);
-      if (success) {
+      /*if (success) {
         word = _getRandomWordFromList();
-      }
-      outputWordField();
-    } while (_wordlist.isNotEmpty);
+      }*/
+      //stdout.writeln(', success: ' + success.toString());
+      //outputWordField();
+    }
 
     outputWordField();
 
@@ -184,6 +83,7 @@ class Generator {
   String _getRandomWordFromList() {
     final word = _wordlist[_random.nextInt(_wordlist.length)];
     _wordlist.remove(word);
+    print(word);
     return word;
   }
 }
