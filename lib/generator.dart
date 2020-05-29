@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:buchstabenTest/Field2d.dart';
 
 class Generator {
   List<String> _wordlist = <String>[];
@@ -35,6 +36,7 @@ class Generator {
       if (reversed) {
         word = word.split('').reversed.join();
       }
+      /*
       if (horizontal) {
         //region horizontal
         if (_wordfield.length < ypos) {
@@ -146,11 +148,18 @@ class Generator {
           }
         }
         //endregion vertikal
+      }*/
+      var success;
+      if (horizontal) {
+        success = _wordfield.insertHorizontal(ypos, xpos, word);
+      } else {
+        success = _wordfield.insertVertical(ypos, xpos, word);
       }
-
       xpos = xpos + _random.nextInt(5);
       ypos = ypos + _random.nextInt(5);
-      word = _getRandomWordFromList();
+      if (success) {
+        word = _getRandomWordFromList();
+      }
       outputWordField();
     }
 

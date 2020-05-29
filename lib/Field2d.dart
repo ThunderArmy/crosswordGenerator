@@ -63,7 +63,7 @@ extension Field2d on List<List<String>> {
     if (length < ypos + word.length) {
       //höhe nicht ausreichend -> neue listen einfügen
       while (length < ypos + word.length) {
-        add(List<String>.filled(xpos + 1, '0'));
+        add(List<String>.filled(xpos + 1, '0', growable: true));
       }
     }
 
@@ -86,6 +86,7 @@ extension Field2d on List<List<String>> {
         elementAt(i + ypos)[xpos] = word[i];
         ;
       }
+      return true;
     } else {
       //länge passt nicht
       //länge anpassen
@@ -99,6 +100,7 @@ extension Field2d on List<List<String>> {
         elementAt(i + ypos)[xpos] = word[i];
         ;
       }
+      return true;
     }
   }
 }
