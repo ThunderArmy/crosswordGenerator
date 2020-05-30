@@ -4,16 +4,31 @@ import 'package:buchstabenTest/Field2d.dart';
 
 class Generator {
   List<String> _wordlist = <String>[];
-  final _random = Random();
+  static final _random = Random();
   final List<List<String>> _wordfield = <List<String>>[];
   static const DIRECTIONS = 2;
   var length;
+  static const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
   Generator(String path) {
     final file = File(path);
-    _wordlist = file.readAsLinesSync().toList();
-
+    _wordlist = file.readAsLinesSync().map((e) => e.toUpperCase()).toList();
     print('count: ' + _wordlist.length.toString());
+  }
+
+  String _getRandomLetter() {
+    return LETTERS[_random.nextInt(LETTERS.length)];
+  }
+
+  void replaceZeros() {
+    for (var i = 0; i < _wordfield.length; i++) {
+      var list = _wordfield[i];
+      for (var j = 0; j < list.length; j++) {
+        if (list[j] == '0') {
+          list[j] = _getRandomLetter();
+        }
+      }
+    }
   }
 
   List<List<String>> generate() {
@@ -51,13 +66,16 @@ class Generator {
           horizontal.toString() +
           ', word: ' +
           word);
-      */if (horizontal) {
+      */
+      if (horizontal) {
         success = _wordfield.insertHorizontal(ypos, xpos, word);
       } else {
         success = _wordfield.insertVertical(ypos, xpos, word);
       }
-      xpos = xpos + _random.nextInt(5);
-      ypos = ypos + _random.nextInt(5);
+      xpos = xpos + _random.nextInt(5) * (_random.nextBool() ? 1 : -1);
+      xpos = xpos.abs();
+      ypos = ypos + _random.nextInt(5) * (_random.nextBool() ? 1 : -1);
+      ypos = ypos.abs();
       /*if (success) {
         word = _getRandomWordFromList();
       }*/
